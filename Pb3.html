@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rolo Ruleta Hot 🔥😈</title>
+    <style>
+        :root {
+            --primary: #b22222;
+            --dark: #0d0012;
+            --accent: #4b0082;
+            --pink: #c71585;
+            --gold: #ffd700;
+            --glow: #ff1493;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, var(--dark), #14001a, var(--accent), #220026);
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        h1 { font-size: clamp(1.8rem, 8vw, 3rem); color: var(--primary); text-shadow: 0 0 15px var(--glow); margin: 10px 0; }
+        h1 span { color: var(--gold); }
+
+        #container {
+            position: relative;
+            width: min(80vw, 320px);
+            height: min(80vw, 320px);
+            margin: 15px auto;
+        }
+
+        #wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0deg 36deg, var(--pink) 36deg 72deg, var(--accent) 72deg 108deg,
+                #8b008b 108deg 144deg, var(--primary) 144deg 180deg, var(--pink) 180deg 216deg,
+                var(--accent) 216deg 252deg, #9932cc 252deg 288deg, var(--primary) 288deg 324deg,
+                var(--pink) 324deg 360deg
+            );
+            box-shadow: 0 0 40px var(--glow);
+            border: 6px solid var(--gold);
+            transition: transform 6s cubic-bezier(0.1, 0, 0.2, 1);
+        }
+
+        #pointer {
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 15px solid transparent;
+            border-right: 15px solid transparent; border-bottom: 30px solid var(--gold); z-index: 10;
+        }
+
+        #spinBtn {
+            background: linear-gradient(45deg, var(--primary), var(--pink));
+            color: white; border: 2px solid var(--gold); padding: 15px 35px;
+            font-size: 1.2rem; border-radius: 50px; cursor: pointer; font-weight: bold;
+        }
+
+        /* MODAL AJUSTADO PARA FOTOS COMPLETAS */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.96); overflow-y: auto; }
+        
+        .modal-content { 
+            background: #120016; 
+            margin: 20px auto; /* Reducido para dar más espacio a la foto */
+            padding: 20px; 
+            border: 2px solid var(--gold); 
+            width: 90%; 
+            max-width: 450px; 
+            border-radius: 20px; 
+            box-sizing: border-box;
+        }
+
+        /* CONTENEDOR DE IMAGEN FLEXIBLE */
+        .reto-img-box {
+            width: 100%; 
+            margin: 15px 0; 
+            border-radius: 10px;
+            display: none; 
+            border: 1px solid var(--gold); 
+            background: #000;
+            overflow: hidden;
+        }
+        
+        .reto-img-box img { 
+            width: 100%; 
+            height: auto; /* Permite que la altura se ajuste a la foto original */
+            display: block;
+            object-fit: contain; 
+        }
+
+        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .btn { padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; color: white; }
+        .btn-green { background: #28a745; }
+        .btn-pink { background: var(--pink); }
+        .btn-gold { background: var(--accent); }
+    </style>
+</head>
+<body onload="document.getElementById('juramentoModal').style.display='block'">
+
+    <h1>Rolo Ruleta Hot <span>🔥😈</span></h1>
+
+    <div id="container">
+        <div id="pointer"></div>
+        <div id="wheel"></div>
+    </div>
+
+    <div id="result" style="color: var(--gold); margin: 10px;">¡Toca para pecar!</div>
+    <div id="remaining" style="color: var(--pink); margin-bottom: 10px; font-size: 0.9rem;"></div>
+    
+    <button id="spinBtn" onclick="spinWheel()">Girar Ruleta 🔥</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--primary); margin-top: 0;">¡Reto Prohibido!</h2>
+            <p id="modalReto" style="font-size: 1.1rem; line-height: 1.4;"></p>
+            
+            <div id="imageContainer" class="reto-img-box">
+                <img id="retoImg" src="" alt="Cargando ejemplo...">
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn btn-green" onclick="closeModal()">Hecho 🔥</button>
+                <button class="btn btn-pink" onclick="closeModal()">No hecho 😏</button>
+                <button class="btn btn-gold" onclick="closeModal(); spinWheel();">Girar de nuevo</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="juramentoModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--gold);">¡Juramento! 😈</h2>
+            <p style="text-align: left; font-size: 0.9rem;">
+                Juramos cumplir todo al 100%. <br><br>
+                🟢 Verde: Continuar | 🟡 Amarillo: Pausa | 🔴 Rojo: Parar.
+            </p>
+            <button class="btn btn-green" style="width: 100%" onclick="document.getElementById('juramentoModal').style.display='none'">Acepto y Continuar 💋</button>
+        </div>
+    </div>
+
+    <script>
+        // LISTA DE RETOS (Se mantiene tu lista original)
+        let retos = [
+            { t: "Quítate una prenda", i: "12Q-bdAxmZ5Lyg6wsCureNvyQARTEI8Oz" },
+            { t: "Quítale una prenda a tu pareja", i: "1o72ifEB3e8BS0lBH6hSanWCU6O2FmEc2" },
+            { t: "Habla sucio durante el sexo: eres mi puta...", i: "ID_DE_DRIVE" },
+            { t: "¿Dejarías a tu pareja tener sexo con otra persona mientras tú observas?", i: "12gF1f_7j473_R1ZgiQwyeJ1JzaG5b4Ln" },
+            { t: "¿Dejarías a tu pareja ir a un motel mientras tú te masturbas?", i: "1xx6BRFCk9kXwbjGToREXwDDFNm2LZyqY" },
+            { t: "Hombre: Deja que tu pareja haga contigo lo que quiera por 10 minutos", i: "ID_DE_DRIVE" },
+            { t: "Rol play cuckold: Quieres verla siendo cogida por otro", i: "1JMVguztGKaBRop3-ajhshcVxcRn1jmkY" },
+            { t: "Rol Play hot wife: Quieres que sea cornudo y tú su sumiso", i: "1FPdsFknfxTEPQt1iE2Bj0OswWd0gkkP8" },
+            { t: "Beso francés intenso por 2 minutos", i: "1pMXplyg9s9KtmcszQcHbZVfFEahJPBPX" },
+            { t: "Masaje erótico en una zona que elijas (sin genitales)", i: "10mq2bHA_4K-etmXiCcWxUCzVVcegDAGu" },
+            { t: "Describe tu fantasía sexual favorita en detalle", i: "ID_DE_DRIVE" },
+            { t: "Mastúrbate mutuamente mirándose a los ojos sin correrse", i: "1uGThJAqIgRZC3DfscqsqdEcChtJeLNog" },
+            { t: "¿Cuál es la posición sexual que más te excita?", i: "ID_DE_DRIVE" },
+            { t: "Lame o besa el cuello/orejas/pecho por 1 minuto", i: "ID_DE_DRIVE" },
+            { t: "Confiesa algo que te excite imaginar de tu pareja con otra persona", i: "13AkP-kvF6uTYOl34vxVAzjEaNd36-Yin" },
+            { t: "Role-play: Jefe y secretaria/o sumisa/o", i: "ID_DE_DRIVE" },
+            { t: "¿Te excitaría ver a tu pareja coqueteando con alguien más?", i: "1jO9bow-ILwYyv5bYBGK9PzuttiEyo0jf" },
+            { t: "Usa manos o boca en zona genital por 5 min sin terminar", i: "ID_DE_DRIVE" },
+            { t: "Di en voz alta lo que más te gusta de cómo te coge", i: "ID_DE_DRIVE" },
+            { t: "Viaje desnuda en auto (Mujer): Él te toca mientras conduces", i: "1MZ4AU-8dSUolmSFDZvFQxMD0vXVAXkSR" },
+            { t: "Sexo a la orilla del mar al atardecer", i: "ID_DE_DRIVE" },
+            { t: "Dedo + oral profundo (Hombre): Ella controla", i: "10GQC7VXMtBkiR8x12NBKudbX5BygCNZo" },
+            { t: "Micro bikini + aceite en playa: Unta aceite en público", i: "1pO_AwbS3j5ldII6pbt0JWZxepMduZA7u" },
+            { t: "Cena sin ropa interior (Mujer): Envía fotos bajo la mesa", i: "ID_DE_DRIVE" },
+            { t: "Strip-tease + oral arrodillada (Mujer)", i: "ID_DE_DRIVE" },
+            { t: "Plug anal todo el día (Mujer): Describe cómo te sientes llena", i: "1Im51EvZ2pzyqAac4r9KJ9ZWh5uw55FO8" },
+            { t: "Grabar video casero hardcore: Véanlo juntos después", i: "ID_DE_DRIVE" },
+            { t: "Confesión infidelidad fingida mientras cogen (Mujer)", i: "1itglvoO68sduNGzzgMQjlushuuonQS04" },
+            { t: "Masturbación frente al espejo + instrucciones (Hombre)", i: "ID_DE_DRIVE" },
+            { t: "Día sin límites: Uno decide todo por 24 horas", i: "ID_DE_DRIVE" },
+            { t: "Flashing nocturno en calle (Mujer): Levanta falda/blusa", i: "1srAo2q7GqykxOXHJXkSDWiuJhbXyrWZH" },
+            { t: "Masaje full body + anal (Hombre): Lento y profundo", i: "ID_DE_DRIVE32" },
+            { t: "Nudes/vídeos cachondos durante el día", i: "ID_DE_DRIVE33" },
+            { t: "Juguete humano atado (Hombre): Ella te usa a su antojo", i: "1cB8BquMw-1umZh2YUbGTYgSXkONsKv49" },
+            { t: "Viajar desnuda en auto de noche", i: "1qBzv3XqZfBSIncqtqSaz_x20aGkFzMtN" },
+            { t: "Sexo a la orilla del mar con dirty talk de ser vistos", i: "ID_DE_DRIVE" },
+            { t: "Fotos desnuda completa en calle sola de noche", i: "1hiWw5kZz_VwrFJSe9RY8kVpIYYsKiMj5" },
+            { t: "Topless caminando en playa remota", i: "ID_DE_DRIVE38" },
+            { t: "Flashing en auto mientras pasan camiones de noche", i: "ID_DE_DRIVE39" },
+            { t: "Desnuda en escaleras de edificio vacío de noche", i: "1z-TIwRb7RC4oTtJ2nPS9bUFWth2OmRdb" },
+            { t: "Fotos desnuda en calle desierta de día", i: "11DmaqFed-iVHAtXYxYF6gtnLFv_0syVx" },
+            { t: "Masturbarse topless en auto parqueado de noche", i: "ID_DE_DRIVE" },
+            { t: "Sexo contra árbol en bosque o sendero", i: "ID_DE_DRIVE" },
+            { t: "Caminar desnuda por playa vacía de noche", i: "_44Falta" },
+            { t: "Flashing completo en puente peatonal solitario", i: "ID_DE_DRIVE45" },
+            { t: "Oral rápido en baño público de gasolinera", i: "ID_DE_DRIVE46" },
+            { t: "Fotos mostrando culo/plug anal en calle semi-pública", i: "ID_DE_DRIVE47" },
+            { t: "Sexo en asiento trasero en estacionamiento público", i: "ID_DE_DRIVE48" },
+            { t: "Flashing pechos o más en ascensor público", i: "ID_DE_DRIVE49" },
+            { t: "Sexo con ventana abierta del auto y gemidos audibles", i: "ID_DE_DRIVE50" },
+            { t: "Ir a balneario en una tanga muy provocativa", i: "1Pudn7op2yg7bnG_gtCeAoyhEPA1BUzwh" },
+            { t: "Subir foto anónima en tanga a Reddit o twitter", i: "ID_DE_DRIVE52" },
+            { t: "Reto Oral: 2 minutos sin parar para el hombre", i: "ID_DE_DRIVE53" },
+            { t: "Reto Oral Inverso: 2 minutos enfocados en clítoris", i: "ID_DE_DRIVE54" },
+            { t: "Reto de Montada: Cowgirl hasta hacerlo venir", i: "1GFDJI0HgJePkMm24Lk8_ug39bSTp7zCT" },
+            { t: "Reto Facial: Oral hasta que se venga en tu cara", i: "1Kxmoarc4Ew378LmCqdzGkBaenk-Ts-cl" },
+            { t: "Beso Blanco: Intercambio de semen tras el oral", i: "1kW_VgX0KoQTm_7vcrVag8DB5lVXnLMDI" },
+            { t: "Reto Fotográfico: 5 fotos en poses extremas", i: "ID_DE_DRIVE" },
+            { t: "Mujer inventa un reto rápido para el hombre ahora", i: "ID_DE_DRIVE" },
+            { t: "Subida Pública Simulada: Foto sexy a grupo swinger", i: "ID_DE_DRIVE60" },
+            { t: "Reto de Jaula: Ponle jaula de castidad al marido", i: "1FpmZCSXHhyu1Q-iYx4qnXJoi75-XDi_q" },
+            { t: "Role Play Cuckold Oral: ¿Te gustaría verme con otro?", i: "1TG5tz_R7dvi35W5dpqdCL9VTpWOtM7ku" },
+            { t: "Mujer: Siéntate en su cara por 2 minutos", i: "1zDItp8noTIMoKtjNHUn3Clnmh92vQBVA" },
+            { t: "Hombre: dale beso negro por 2 minutos", i: "1JgT7LLtgf43sdLk6R_Uc8YvxVVYtcRMr" },
+            { t: "Mujer: dale beso negro por 2 minutos", i: "190zLp47CsAji8wYmjUuC49DqWaGat-OI" },
+            { t: "Hagan 69 con dedo en el culo mutuo", i: "1BokxOldbKK5WsIQSEF0fVASkcL3pNNxS" }
+        ];
+
+        const wheel = document.getElementById('wheel');
+        const remText = document.getElementById('remaining');
+        remText.innerText = `Retos restantes: ${retos.length}`;
+
+        function getDriveUrl(id) {
+            if (!id || id === "ID_DE_DRIVE" || id.startsWith("_")) return "";
+            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
+        }
+
+        function spinWheel() {
+            if (retos.length === 0) return alert("¡Se acabaron los retos!");
+            
+            document.getElementById('spinBtn').disabled = true;
+            const deg = Math.floor(Math.random() * 360) + 2160; 
+            wheel.style.transform = `rotate(${deg}deg)`;
+
+            setTimeout(() => {
+                const idx = Math.floor(Math.random() * retos.length);
+                const sel = retos[idx];
+                
+                document.getElementById('modalReto').innerText = sel.t;
+                const imgElement = document.getElementById('retoImg');
+                const imgCont = document.getElementById('imageContainer');
+                
+                const finalUrl = getDriveUrl(sel.i);
+
+                if (finalUrl !== "") {
+                    imgElement.src = finalUrl;
+                    imgCont.style.display = "block";
+                    imgElement.onerror = () => { imgCont.style.display = "none"; };
+                } else {
+                    imgCont.style.display = "none";
+                }
+
+                document.getElementById('myModal').style.display = "block";
+                retos.splice(idx, 1);
+                remText.innerText = `Retos restantes: ${retos.length}`;
+                document.getElementById('spinBtn').disabled = false;
+            }, 6100);
+        }
+
+        function closeModal() { document.getElementById('myModal').style.display = "none"; }
+    </script>
+</body>
+</html>
